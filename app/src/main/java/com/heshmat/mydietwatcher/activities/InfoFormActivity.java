@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,6 +28,7 @@ import com.heshmat.mydietwatcher.FormattingDate;
 import com.heshmat.mydietwatcher.R;
 import com.heshmat.mydietwatcher.StaticFields;
 import com.heshmat.mydietwatcher.adapters.MySpinnerAdapter;
+import com.heshmat.mydietwatcher.intro.IntroActivity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -133,8 +135,9 @@ public class InfoFormActivity extends AppCompatActivity implements
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                startActivity(new Intent(InfoFormActivity.this, HomeActivity.class));
-                                finish();
+                                showIntro();
+                                /*startActivity(new Intent(InfoFormActivity.this, HomeActivity.class));
+                                finish();*/
                             } else {
                                 Toast.makeText(InfoFormActivity.this, "Something went wrong" + task.getException(), Toast.LENGTH_SHORT).show();
                             }
@@ -155,6 +158,23 @@ public class InfoFormActivity extends AppCompatActivity implements
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+    private void showIntro(){
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("myPrefs", MODE_PRIVATE);
+        Boolean isIntroActivityOpnendBefore = pref.getBoolean("isIntroOpened", false);
+
+        if (isIntroActivityOpnendBefore) {
+            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+            Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
 
     }
 }

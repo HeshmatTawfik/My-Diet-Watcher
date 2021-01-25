@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -117,7 +118,6 @@ public class AddDietFragment extends Fragment implements SearchFoodAdapter.Searc
         dietFoodRv.getAdapter().registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
-                Toast.makeText(AddDietFragment.this.getContext(), "changed", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -215,6 +215,10 @@ public class AddDietFragment extends Fragment implements SearchFoodAdapter.Searc
     @Override
     public void decreaseAmount(int i) {
         double totalKcal = calculateCalories(mDietFood);
+        if (mDietFood.get(i).getAmount()<=0){
+            mDietFood.remove(i);
+            mAddFoodAdapter.notifyDataSetChanged();
+        }
         totalKcalTv.setText("This diet is: " + String.valueOf(totalKcal) + " Kcal");
     }
 
@@ -252,12 +256,18 @@ public class AddDietFragment extends Fragment implements SearchFoodAdapter.Searc
                 public void onComplete(@NonNull Task<Void> task) {
                     loadingDialog.dismissDialog();
                     if (task.isSuccessful()) {
-
+                        AddDietFragment.this.getActivity().getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.fragmentContainer, AllMyDietFragment.newInstance()).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                .addToBackStack(null)
+                                .commit();
                     }
 
                 }
             });
 
+        }
+        else {
+            Toast.makeText(this.getContext(), "You have to add food to your diet", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -39,6 +39,7 @@ import com.heshmat.mydietwatcher.fragments.AllMyDietFragment;
 import com.heshmat.mydietwatcher.fragments.ProfileFragment;
 import com.heshmat.mydietwatcher.fragments.StatsticsFragment;
 import com.heshmat.mydietwatcher.fragments.TodayPlanFragment;
+import com.heshmat.mydietwatcher.intro.IntroActivity;
 import com.heshmat.mydietwatcher.models.User;
 
 import static com.heshmat.mydietwatcher.activities.LoginActivity.gso;
@@ -161,6 +162,9 @@ public class HomeActivity extends AppCompatActivity implements
                 break;
             case R.id.nav_statistics:
                 fragment= StatsticsFragment.class;
+                break;
+            case R.id.nav_tutorial:
+                startActivity(new Intent(HomeActivity.this, IntroActivity.class));
                 break;
             case R.id.nav_logout:
                 LoginActivity.Disconnect_google(HomeActivity.this, HomeActivity.this);
